@@ -1,11 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-interface IMentatMarket {
+import {IFunctionsConsumer} from "./IFunctionsConsumer.sol";
+
+interface IMentatMarket is IFunctionsConsumer {
     error MarketExists(bytes32 id);
+    error MarketDoesNotExist(bytes32 id);
     error MarketExpired(uint256 expiry, uint256 blockTimestamp);
+    error MarketResolved(bytes32 id);
+    error SlippageExceeded(uint256 mintAmount, uint256 minOutAmount);
 
     struct MarketParams {
+        bytes request;
         string metadataUri;
         address creator;
         uint256 expiry;
@@ -14,6 +20,8 @@ interface IMentatMarket {
     struct Market {
         address yes;
         address no;
+        bool resolved;
+        bool outcome;
         MarketParams params;
     }
 
